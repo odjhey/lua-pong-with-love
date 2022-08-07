@@ -1,24 +1,24 @@
-require('player')
-require('ball')
-require('ai')
+require('objects/player')
+require('objects/ball')
+require('objects/ai')
 require('world')
+
+Score = {}
 
 function love.load()
 
   Score = { player = 0, ai = 0 }
 
-  Player:load()
-
-  Ball:load({
+  local effects = {
     leftOutOfBoundsEffect = function() Score.player = Score.player + 1 end,
     rightOutOfBoundsEffect = function() Score.ai = Score.ai + 1 end,
-  })
+  }
 
+  Ball:load()
+  Player:load()
   Ai:load()
 
-  World:load(Ball, Player, Ai)
-
-
+  World:load(Ball, Player, Ai, effects)
   Font = love.graphics.newFont(20)
 end
 
@@ -28,7 +28,6 @@ function love.update(dt)
   Ai:update(dt)
 
   World:update(dt)
-
 end
 
 function love.draw()
