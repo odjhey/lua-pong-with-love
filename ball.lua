@@ -1,7 +1,9 @@
+local H = require('helpers')
+
 Ball = {}
 
 
-function Ball:load()
+function Ball:load(effects)
   self.x = love.graphics.getWidth() / 2
   self.y = love.graphics.getHeight() / 2
 
@@ -12,6 +14,8 @@ function Ball:load()
 
   self.xVel = -self.speed
   self.yVel = 0
+
+  self.effects = effects
 end
 
 function Ball:update(dt)
@@ -20,7 +24,8 @@ function Ball:update(dt)
 end
 
 function Ball:collide()
-  if Helpers.checkCollision(self, Player) then
+
+  if H.checkCollision(self, Player) then
     self.xVel = self.speed
     local middleBall = self.y + self.height / 2
     local middlePlayer = Player.y + Player.height / 2
@@ -28,7 +33,7 @@ function Ball:collide()
     self.yVel = collisionPosition * 5
   end
 
-  if Helpers.checkCollision(self, Ai) then
+  if H.checkCollision(self, Ai) then
     self.xVel = -self.speed
     local middleBall = self.y + self.height / 2
     local middleAi = Ai.y + Ai.height / 2
@@ -49,7 +54,7 @@ function Ball:collide()
     self.y = love.graphics.getHeight() / 2 - self.height / 2
     self.yVel = 0
     self.xVel = self.speed
-    Score.ai = Score.ai + 1
+    self.effects.rightOutOfBoundsEffect()
   end
 
   if self.x + self.width > love.graphics.getWidth() then
@@ -57,7 +62,7 @@ function Ball:collide()
     self.y = love.graphics.getHeight() / 2 - self.height / 2
     self.yVel = 0
     self.xVel = -self.speed
-    Score.player = Score.player + 1
+    self.effects.leftOutOfBoundsEffect()
   end
 end
 
